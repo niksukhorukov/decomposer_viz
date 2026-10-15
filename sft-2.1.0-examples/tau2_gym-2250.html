@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Моська: трейс</title><style>
+* { box-sizing: border-box; }
+body { margin: 0; padding: 32px; background: #f5f7f8; color: #23343d;
+       font: 15px/1.5 system-ui, sans-serif; }
+.chart { overflow-x: auto; background: white; border: 1px solid #dce4e7;
+         border-radius: 12px; }
+svg { display: block; width: 100%; min-width: 1000px; height: auto; }
+svg text { font-family: system-ui, sans-serif; fill: #23343d; }
+.tick { font-size: 12px; fill: #60717b; }
+.grid { stroke: #e4eaed; stroke-dasharray: 3 5; }
+.fork, .run-thread { stroke: #d7e0e4; }
+.agent-name { font-size: 14px; font-weight: 600; }
+.animal { font-size: 23px; }
+.fork, .run-thread { fill: none; }
+.created { fill: white; stroke: #60717b; stroke-width: 2; }
+.run-line { stroke: #338b79; stroke-width: 6; stroke-linecap: round; }
+.failed .run-line, .failed .event:hover circle, .failed .event:focus circle {
+  stroke: #bc5252; }
+.uncollected .run-line { stroke: #a38145; }
+.event { cursor: pointer; outline: none; }
+.event circle { fill: white; stroke: #dce4e7; }
+.event:hover circle, .event:focus circle { stroke: #338b79; stroke-width: 2; }
+#tooltip { position: fixed; z-index: 1; width: min(560px, calc(100vw - 24px));
+           max-height: min(440px, calc(100vh - 24px)); overflow: auto;
+           padding: 16px 20px; border: 1px solid #c8d5da; border-radius: 18px 18px 18px 4px;
+           background: white; box-shadow: 0 8px 32px #23343d26; }
+.message { overflow-wrap: anywhere; line-height: 1.6; }
+.message > :first-child { margin-top: 0; }
+.message > :last-child { margin-bottom: 0; }
+.message p, .message ul, .message ol, .message pre, .message blockquote,
+.message table { margin: 0 0 12px; }
+.message h1, .message h2, .message h3, .message h4, .message h5, .message h6 {
+  margin: 20px 0 10px; line-height: 1.3; }
+.message h1 { font-size: 22px; }
+.message h2 { font-size: 20px; }
+.message h3 { font-size: 17px; }
+.message h4, .message h5, .message h6 { font-size: 15px; }
+.message ul, .message ol { padding-left: 24px; }
+.message li + li { margin-top: 4px; }
+.message li > p { margin: 0; }
+.message code { padding: 2px 5px; border-radius: 4px; background: #f0f4f6;
+                font: 13px/1.5 ui-monospace, monospace; }
+.message pre { padding: 12px; border-radius: 8px; background: #f0f4f6;
+               overflow-x: auto; }
+.message pre code { padding: 0; background: none; white-space: pre; }
+.message blockquote { padding-left: 12px; border-left: 3px solid #c8d5da; color: #60717b; }
+.message blockquote > :last-child { margin-bottom: 0; }
+.message table { border-collapse: collapse; display: block; max-width: 100%; overflow-x: auto; }
+.message th, .message td { padding: 6px 10px; border: 1px solid #dce4e7; text-align: left; }
+.message th { background: #f0f4f6; }
+.message a { color: #247360; text-underline-offset: 2px; }
+.message hr { border: 0; border-top: 1px solid #dce4e7; margin: 16px 0; }
+.message img { max-width: 100%; }
+@media (max-width: 600px) { body { padding: 16px; } }
+</style></head>
+<body>
+<div class="chart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 516" aria-label="Временная шкала агентов Моськи">
+<g class="decomposer"><text class="animal" x="24" y="107">🐶</text><text class="agent-name" x="60" y="105">Моська</text></g>
+<g class="agent" data-agent-id="d54b10d3-cb79-454c-8436-4f3b171ce494"><rect x="0" y="144" width="1200" height="88" fill="#f8fafb"/><text class="animal" x="24" y="195">🦩</text><text class="agent-name" x="60" y="193">Сонный фламинго</text></g>
+<g class="agent" data-agent-id="3aa2e82f-ed95-401f-83be-f0bea3f5cda2"><rect x="0" y="232" width="1200" height="88" fill="#ffffff"/><text class="animal" x="24" y="283">🦌</text><text class="agent-name" x="60" y="281">Весёлый олень</text></g>
+<g class="agent" data-agent-id="3aa4279f-e764-44d9-a622-7fa766655ed4"><rect x="0" y="320" width="1200" height="88" fill="#f8fafb"/><text class="animal" x="24" y="371">🦏</text><text class="agent-name" x="60" y="369">Весёлый носорог</text></g>
+<g class="agent" data-agent-id="eb63dd7b-b801-44ee-a0bc-269e797249e9"><rect x="0" y="408" width="1200" height="88" fill="#ffffff"/><text class="animal" x="24" y="459">🦒</text><text class="agent-name" x="60" y="457">Умелый жираф</text></g>
+<line class="grid" x1="260.00" x2="260.00" y1="52" y2="496"/><text class="tick" x="260.00" y="30" text-anchor="middle">0 с</text>
+<line class="grid" x1="441.60" x2="441.60" y1="52" y2="496"/><text class="tick" x="441.60" y="30" text-anchor="middle">12.2 с</text>
+<line class="grid" x1="623.20" x2="623.20" y1="52" y2="496"/><text class="tick" x="623.20" y="30" text-anchor="middle">24.3 с</text>
+<line class="grid" x1="804.80" x2="804.80" y1="52" y2="496"/><text class="tick" x="804.80" y="30" text-anchor="middle">36.5 с</text>
+<line class="grid" x1="986.40" x2="986.40" y1="52" y2="496"/><text class="tick" x="986.40" y="30" text-anchor="middle">48.6 с</text>
+<line class="grid" x1="1168.00" x2="1168.00" y1="52" y2="496"/><text class="tick" x="1168.00" y="30" text-anchor="middle">60.8 с</text>
+<g class="invocation " data-run-id="b36211bd-b7cc-4714-9819-8c17ffc4f243"><path class="run-thread" d="M 260.00 74 V 88.00 Q 260.00 100 272.00 100 H 1156.00 Q 1168.00 100 1168.00 112.00 V 126"/><line class="run-line" x1="272.00" x2="1156.00" y1="100" y2="100"/><g class="event" data-tooltip="tip-0" tabindex="0" role="img" aria-label="Запрос пользователя" aria-describedby="tooltip" transform="translate(260.00 74)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🧑</text></g><g class="event" data-tooltip="tip-1" tabindex="0" role="img" aria-label="Ответ Моськи" aria-describedby="tooltip" transform="translate(1168.00 126)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🐶</text></g></g>
+<path class="fork" d="M 480.91 188 H 518.55 Q 530.55 188 530.55 200.00 V 276"><title>Форк от агента «Сонный фламинго»</title></path>
+<path class="fork" d="M 480.91 188 H 569.55 Q 581.55 188 581.55 200.00 V 364"><title>Форк от агента «Сонный фламинго»</title></path>
+<g class="run " data-run-id="01a13126-b32a-7d73-85e5-e7be3ef73c6a"><path class="run-thread" d="M 302.52 162 V 176.00 Q 302.52 188 314.52 188 H 480.91 Q 492.91 188 492.91 200.00 V 214"/><line class="run-line" x1="314.52" x2="480.91" y1="188" y2="188"/><g class="event" data-tooltip="tip-2" tabindex="0" role="img" aria-label="Сообщение Моськи" aria-describedby="tooltip" transform="translate(302.52 162)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🐶</text></g><g class="event" data-tooltip="tip-3" tabindex="0" role="img" aria-label="Ответ агента «Сонный фламинго»" aria-describedby="tooltip" transform="translate(492.91 214)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🦩</text></g></g>
+<g class="run " data-run-id="01a13127-06a6-7c52-b1b7-9c9980f104d7"><path class="run-thread" d="M 621.47 250 V 264.00 Q 621.47 276 633.47 276 H 748.99 Q 760.99 276 760.99 288.00 V 302"/><line class="run-line" x1="633.47" x2="748.99" y1="276" y2="276"/><g class="event" data-tooltip="tip-4" tabindex="0" role="img" aria-label="Сообщение Моськи" aria-describedby="tooltip" transform="translate(621.47 250)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🐶</text></g><g class="event" data-tooltip="tip-5" tabindex="0" role="img" aria-label="Ответ агента «Весёлый олень»" aria-describedby="tooltip" transform="translate(760.99 302)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🦌</text></g></g>
+<g class="run " data-run-id="01a13127-06aa-7263-9ba0-3b371621ab14"><path class="run-thread" d="M 621.48 338 V 352.00 Q 621.48 364 633.48 364 H 748.99 Q 760.99 364 760.99 376.00 V 390"/><line class="run-line" x1="633.48" x2="748.99" y1="364" y2="364"/><g class="event" data-tooltip="tip-6" tabindex="0" role="img" aria-label="Сообщение Моськи" aria-describedby="tooltip" transform="translate(621.48 338)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🐶</text></g><g class="event" data-tooltip="tip-7" tabindex="0" role="img" aria-label="Ответ агента «Весёлый носорог»" aria-describedby="tooltip" transform="translate(760.99 390)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🦏</text></g></g>
+<g class="run " data-run-id="01a13127-3df8-7592-b226-9b8efa2db0d0"><path class="run-thread" d="M 825.12 426 V 440.00 Q 825.12 452 837.12 452 H 1129.11 Q 1141.11 452 1141.11 464.00 V 478"/><line class="run-line" x1="837.12" x2="1129.11" y1="452" y2="452"/><g class="event" data-tooltip="tip-8" tabindex="0" role="img" aria-label="Сообщение Моськи" aria-describedby="tooltip" transform="translate(825.12 426)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🐶</text></g><g class="event" data-tooltip="tip-9" tabindex="0" role="img" aria-label="Ответ агента «Умелый жираф»" aria-describedby="tooltip" transform="translate(1141.11 478)"><circle r="16"/><text class="animal" text-anchor="middle" dominant-baseline="central">🦒</text></g></g>
+<circle class="created" cx="276.37" cy="188" r="4"><title>Создание: 1.09569 с</title></circle>
+<circle class="created" cx="530.55" cy="276" r="4"><title>Создание: 18.104 с</title></circle>
+<circle class="created" cx="581.55" cy="364" r="4"><title>Создание: 21.5163 с</title></circle>
+<circle class="created" cx="794.61" cy="452" r="4"><title>Создание: 35.7733 с</title></circle>
+</svg></div>
+<div id="tooltip" role="tooltip" tabindex="0" hidden></div>
+<template id="tip-0"><div class="message"><p>Pull every CONSTRAINTS_CHECKED placement with at least 6.0 weeks, then cancel it for each one. Just tell me how many records you processed at the end.</p>
+</div></template><template id="tip-1"><div class="message"><p><strong>2 records processed.</strong></p>
+<p>Both placements matching your criteria (status <code>CONSTRAINTS_CHECKED</code>, weeks ≥ 6.0) were found and cancelled:</p>
+<table>
+<thead>
+<tr>
+<th>Placement ID</th>
+<th>Weeks</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PL-470</td>
+<td>8</td>
+<td>Cancelled</td>
+</tr>
+<tr>
+<td>PL-920</td>
+<td>6</td>
+<td>Cancelled</td>
+</tr>
+</tbody>
+</table>
+<p>An independent read-only check confirms both now show status <code>cancelled</code>, and no other placements remain that meet the CONSTRAINTS_CHECKED + ≥6.0 weeks criteria (the remaining CONSTRAINTS_CHECKED placements — PL-300, PL-329, PL-482, PL-847 — all have weeks below 6.0).</p>
+<p>Total records processed: <strong>2</strong>.</p>
+</div></template><template id="tip-2"><div class="message"><p>Find every record whose status/flag is CONSTRAINTS_CHECKED and whose weeks value is at least 6.0. Be read-only for this task: do NOT cancel, modify, or delete anything yet. Return the full list of matching records with their unique identifiers and their weeks values, plus the total count. Also state where these records live (system/data source) so a follow-up cancellation task can act on them.</p>
+</div></template><template id="tip-3"><div class="message"><p>Based on my search of the placement records, here are the results:</p>
+<p><strong>Matching Records (status: CONSTRAINTS_CHECKED, weeks ≥ 6.0):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Placement ID</th>
+<th>Weeks</th>
+<th>Student ID</th>
+<th>Host Family ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PL-470</td>
+<td>8</td>
+<td>ST-809</td>
+<td>HF-132</td>
+</tr>
+<tr>
+<td>PL-920</td>
+<td>6</td>
+<td>ST-626</td>
+<td>HF-132</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total count: 2</strong></p>
+<p><strong>Data Source:</strong> These records live in the <strong>host placement management system</strong>, specifically in the <code>list_placements</code> data structure which tracks all registered homestay placements with their lifecycle states (registered → constraints_checked → consent_verified → quoted → paid → confirmed).</p>
+</div></template><template id="tip-4"><div class="message"><p>Cancel placement PL-470 (CONSTRAINTS_CHECKED, 8 weeks) in the host placement management system. Act on ONLY this one placement — do not touch PL-920 or any other record. Report the resulting status and whether the cancellation succeeded.</p>
+</div></template><template id="tip-5"><div class="message"><p><strong>Cancellation Result:</strong></p>
+<ul>
+<li><strong>Placement ID:</strong> PL-470</li>
+<li><strong>Result:</strong> Cancellation <strong>succeeded</strong></li>
+<li><strong>Resulting Status:</strong> <code>cancelled</code></li>
+</ul>
+<p>The placement has been successfully cancelled.</p>
+</div></template><template id="tip-6"><div class="message"><p>Cancel placement PL-920 (CONSTRAINTS_CHECKED, 6 weeks) in the host placement management system. Act on ONLY this one placement — do not touch PL-470 or any other record. Report the resulting status and whether the cancellation succeeded.</p>
+</div></template><template id="tip-7"><div class="message"><p><strong>Cancellation Result:</strong></p>
+<ul>
+<li><strong>Placement ID:</strong> PL-920</li>
+<li><strong>Status after cancellation:</strong> <code>cancelled</code></li>
+<li><strong>Result:</strong> <strong>Success</strong> — the cancellation was completed successfully.</li>
+</ul>
+</div></template><template id="tip-8"><div class="message"><p>Read-only verification task. Do NOT modify, cancel, or fix anything in the environment.</p>
+<p>In the host placement management system (<code>list_placements</code>), check the current status of placements PL-470 and PL-920. Report for each: its current status, and whether it is still CONSTRAINTS_CHECKED with weeks &gt;= 6.0. Also report whether any OTHER placements remain with status CONSTRAINTS_CHECKED and weeks &gt;= 6.0. State which criteria are met and what cannot be established.</p>
+</div></template><template id="tip-9"><div class="message"><p>Based on my analysis:</p>
+<p><strong>PL-470:</strong></p>
+<ul>
+<li>Current status: <strong>cancelled</strong></li>
+<li>Is CONSTRAINTS_CHECKED with weeks &gt;= 6.0? <strong>NO</strong> (status is cancelled, not constraints_checked; though weeks=8 meets the week threshold)</li>
+</ul>
+<p><strong>PL-920:</strong></p>
+<ul>
+<li>Current status: <strong>cancelled</strong></li>
+<li>Is CONSTRAINTS_CHECKED with weeks &gt;= 6.0? <strong>NO</strong> (status is cancelled, not constraints_checked; though weeks=6 meets the week threshold)</li>
+</ul>
+<p><strong>Other placements with CONSTRAINTS_CHECKED and weeks &gt;= 6.0:</strong></p>
+<ul>
+<li><strong>NONE FOUND</strong>. The four placements currently in CONSTRAINTS_CHECKED status are:
+<ul>
+<li>PL-300: weeks=2 (&lt; 6.0)</li>
+<li>PL-329: weeks=4 (&lt; 6.0)</li>
+<li>PL-482: weeks=1 (&lt; 6.0)</li>
+<li>PL-847: weeks=4 (&lt; 6.0)</li>
+</ul>
+</li>
+</ul>
+<p>None of the other CONSTRAINTS_CHECKED placements meet the weeks &gt;= 6.0 criterion. Neither PL-470 nor PL-920 can be considered CONSTRAINTS_CHECKED because their status is &quot;cancelled,&quot; which is a terminal state they exited from during the placement lifecycle.</p>
+</div></template>
+<script>
+const tooltip = document.getElementById("tooltip");
+let hideTimer;
+function hide() { tooltip.hidden = true; }
+function delayHide() { hideTimer = setTimeout(hide, 180); }
+function show(event) {
+  clearTimeout(hideTimer);
+  const marker = event.currentTarget;
+  tooltip.replaceChildren(
+    document.getElementById(marker.dataset.tooltip).content.cloneNode(true)
+  );
+  tooltip.hidden = false;
+  tooltip.scrollTop = 0;
+  const anchor = marker.getBoundingClientRect();
+  const left = Math.max(12, Math.min(anchor.left, innerWidth - tooltip.offsetWidth - 12));
+  const top = anchor.bottom + 8 + tooltip.offsetHeight <= innerHeight - 12
+    ? anchor.bottom + 8 : Math.max(12, anchor.top - tooltip.offsetHeight - 8);
+  tooltip.style.left = left + "px";
+  tooltip.style.top = top + "px";
+}
+for (const marker of document.querySelectorAll("[data-tooltip]")) {
+  marker.addEventListener("mouseenter", show);
+  marker.addEventListener("focus", show);
+  marker.addEventListener("click", show);
+  marker.addEventListener("mouseleave", delayHide);
+  marker.addEventListener("blur", delayHide);
+}
+tooltip.addEventListener("mouseenter", () => clearTimeout(hideTimer));
+tooltip.addEventListener("mouseleave", delayHide);
+tooltip.addEventListener("focus", () => clearTimeout(hideTimer));
+tooltip.addEventListener("blur", delayHide);
+document.addEventListener("keydown", event => { if (event.key === "Escape") hide(); });
+document.addEventListener("click", event => {
+  if (!event.target.closest("[data-tooltip], #tooltip")) hide();
+});
+document.querySelector(".chart").addEventListener("scroll", hide);
+window.addEventListener("resize", hide);
+window.addEventListener("scroll", hide);
+</script>
+</body></html>
